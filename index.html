@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SwiftDrop – Safe, On-Time Delivery</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#0F172A;color:#fff;font-family:system-ui,Arial,sans-serif}
+html{scroll-behavior:smooth}
+button{cursor:pointer;border:none;outline:none}
+a{text-decoration:none;color:inherit}
+input,textarea,select{outline:none;font-family:system-ui,Arial,sans-serif}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#1E293B}::-webkit-scrollbar-thumb{background:#334155;border-radius:3px}
+.fade-in{animation:fadeUp .5s ease forwards}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.pulse{animation:pulse 2.5s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(245,158,11,.5)}60%{box-shadow:0 0 0 12px rgba(245,158,11,0)}}
+nav{position:sticky;top:0;z-index:999;background:#0F172A;border-bottom:1px solid #334155;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:64px;flex-wrap:wrap;gap:8px}
+.nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:20px;color:#F59E0B;cursor:pointer}
+.nav-links{display:flex;gap:4px;flex-wrap:wrap}
+.nav-btn{background:transparent;color:#CBD5E1;font-family:'Syne',sans-serif;font-weight:600;font-size:12px;padding:6px 12px;border-radius:5px;transition:all .2s;border:none}
+.nav-btn.active{background:#F59E0B;color:#0F172A}
+.nav-btn.admin-btn{border:1px solid #334155}
+.amber-btn{background:#F59E0B;color:#0F172A;font-family:'Syne',sans-serif;font-weight:700;font-size:15px;padding:14px 28px;border-radius:6px;transition:background .2s,transform .15s;border:none;cursor:pointer;display:inline-block}
+.amber-btn:hover{background:#D97706;transform:scale(1.03)}
+.amber-btn.small{font-size:13px;padding:8px 18px}
+.amber-btn.dark{background:#0F172A;color:#fff}
+.outline-btn{background:transparent;color:#fff;border:2px solid #F59E0B;font-family:'Syne',sans-serif;font-weight:700;font-size:15px;padding:12px 26px;border-radius:6px;transition:all .2s;cursor:pointer}
+.outline-btn:hover{background:#F59E0B;color:#0F172A}
+.page{display:none}
+.page.active{display:block}
+.card{background:#1E293B;border-radius:14px;padding:32px;border:1px solid #334155;transition:transform .2s}
+.card:hover{transform:translateY(-4px)}
+footer{background:#1E293B;border-top:1px solid #334155;padding:48px 24px 32px}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo" onclick="showPage('home')">⚡ SwiftDrop</div>
+  <div class="nav-links">
+    <button class="nav-btn active" data-page="home" onclick="showPage('home')">Home</button>
+    <button class="nav-btn" data-page="services" onclick="showPage('services')">Services</button>
+    <button class="nav-btn" data-page="about" onclick="showPage('about')">About</button>
+    <button class="nav-btn" data-page="contact" onclick="showPage('contact')">Contact</button>
+    <button class="nav-btn" data-page="track" onclick="showPage('track')">Track Package</button>
+    <button class="nav-btn admin-btn" data-page="admin" onclick="showPage('admin')">🔒 Admin</button>
+  </div>
+</nav>
+
+<!-- HOME -->
+<div id="page-home" class="page active">
+  <section style="background:linear-gradient(135deg,#0F172A 60%,#1E293B);padding:100px 24px 80px;text-align:center;border-bottom:3px solid #F59E0B">
+    <div style="max-width:800px;margin:0 auto" class="fade-in">
+      <div style="display:inline-flex;align-items:center;gap:8px;background:#1E293B;color:#F59E0B;padding:6px 16px;border-radius:99px;font-size:13px;font-weight:700;margin-bottom:24px;border:1px solid rgba(245,158,11,.2)">
+        🚚 Same-Day Delivery · Real-Time Tracking · 100% Insured
+      </div>
+      <h1 style="font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(34px,5.5vw,64px);line-height:1.1;color:#fff;margin-bottom:20px">
+        Safe, On-Time Delivery<br><span style="color:#F59E0B">for Your Important Packages.</span>
+      </h1>
+      <p style="font-size:18px;color:#CBD5E1;max-width:560px;margin:0 auto 36px;line-height:1.7">
+        No hidden fees, no unexpected delays. Track your delivery from our hands to your door in real-time.
+      </p>
+      <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap">
+        <button class="amber-btn pulse" style="font-size:17px;padding:16px 36px" onclick="showPage('contact')">Book Your Delivery Now</button>
+        <button class="outline-btn" onclick="showPage('contact')">Get a Free Quote</button>
+      </div>
+    </div>
+  </section>
+
+  <section style="background:#F59E0B;padding:20px 24px">
+    <div style="max-width:700px;margin:0 auto;display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:center">
+      <span style="font-family:'Syne',sans-serif;font-weight:700;color:#0F172A;font-size:16px">📦 Track a Package:</span>
+      <input id="home-track-input" placeholder="Enter order ID e.g. PKG-4821" style="padding:10px 16px;border-radius:6px;border:none;font-size:15px;flex:1;min-width:200px;background:#fff;color:#0F172A"/>
+      <button style="background:#0F172A;color:#fff;padding:10px 24px;border-radius:6px;font-weight:700;font-size:15px;font-family:'Syne',sans-serif;cursor:pointer;border:none" onclick="homeTrack()">Track Now →</button>
+    </div>
+  </section>
+
+  <section style="background:#F8FAFC;padding:72px 24px;color:#0F172A">
+    <div style="max-width:1100px;margin:0 auto">
+      <p style="text-align:center;color:#64748B;font-weight:600;margin-bottom:32px;font-size:14px;letter-spacing:1px;text-transform:uppercase">Trusted by over 10,000 local businesses and individuals</p>
+      <div style="display:flex;justify-content:center;gap:28px;flex-wrap:wrap">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:20px 28px;background:#fff;border-radius:12px;box-shadow:0 2px 16px rgba(0,0,0,.08);min-width:110px"><span style="font-size:28px">🔒</span><span style="font-weight:700;font-size:14px;color:#0F172A">Secure Handling</span></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:20px 28px;background:#fff;border-radius:12px;box-shadow:0 2px 16px rgba(0,0,0,.08);min-width:110px"><span style="font-size:28px">✅</span><span style="font-weight:700;font-size:14px;color:#0F172A">100% Insured</span></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:20px 28px;background:#fff;border-radius:12px;box-shadow:0 2px 16px rgba(0,0,0,.08);min-width:110px"><span style="font-size:28px">📍</span><span style="font-weight:700;font-size:14px;color:#0F172A">Live Tracking</span></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:20px 28px;background:#fff;border-radius:12px;box-shadow:0 2px 16px rgba(0,0,0,.08);min-width:110px"><span style="font-size:28px">⚡</span><span style="font-weight:700;font-size:14px;color:#0F172A">Same-Day</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section style="background:#0F172A;padding:72px 24px">
+    <div style="max-width:1100px;margin:0 auto">
+      <div style="text-align:center;margin-bottom:48px"><h2 style="font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(28px,4vw,42px);color:#fff">Results You Can Count On</h2><p style="color:#CBD5E1;margin-top:12px;font-size:17px">What sets us apart from every other courier in the city.</p></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:28px">
+        <div class="card"><div style="font-size:36px;margin-bottom:16px">⏱️</div><h3 style="font-family:'Syne',sans-serif;font-weight:700;font-size:20px;color:#F59E0B;margin-bottom:10px">Save Your Time</h3><p style="color:#CBD5E1;line-height:1.7">You don't have to drop anything off. We pick up directly from your doorstep within 30 minutes.</p></div>
+        <div class="card"><div style="font-size:36px;margin-bottom:16px">🛡️</div><h3 style="font-family:'Syne',sans-serif;font-weight:700;font-size:20px;color:#F59E0B;margin-bottom:10px">Total Peace of Mind</h3><p style="color:#CBD5E1;line-height:1.7">Your package arrives safely, exactly when we promised, or you get your money back.</p></div>
+        <div class="card"><div style="font-size:36px;margin-bottom:16px">⭐</div><h3 style="font-family:'Syne',sans-serif;font-weight:700;font-size:20px;color:#F59E0B;margin-bottom:10px">Keep Your Customers Happy</h3><p style="color:#CBD5E1;line-height:1.7">Protect your business reputation with flawless, same-day delivery your clients can count on.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section style="background:#F8FAFC;padding:72px 24px">
+    <div style="max-width:640px;margin:0 auto;text-align:center">
+      <div style="font-size:40px;margin-bottom:16px">⭐⭐⭐⭐⭐</div>
+      <blockquote style="font-size:20px;line-height:1.7;color:#0F172A;font-style:italic;margin-bottom:20px">"I used to worry about late shipments destroying my small business reputation. This team changed everything. Every single delivery arrives exactly on time."</blockquote>
+      <p style="font-weight:700;color:#64748B">— David K., Business Owner</p>
+    </div>
+  </section>
+
+  <section style="background:#0F172A;padding:72px 24px">
+    <div style="max-width:1100px;margin:0 auto">
+      <div style="text-align:center;margin-bottom:48px"><h2 style="font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(28px,4vw,42px);color:#fff">Frequently Asked Questions</h2><p style="color:#CBD5E1;margin-top:12px;font-size:17px">Quick answers to your most common questions.</p></div>
+      <div style="max-width:700px;margin:0 auto;display:flex;flex-direction:column;gap:12px">
+        <div class="faq-item" style="background:#1E293B;border-radius:10px;border:1px solid #334155;overflow:hidden"><button class="faq-btn" onclick="toggleFaq(0)" style="width:100%;text-align:left;padding:18px 24px;background:none;color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:16px;display:flex;justify-content:space-between;cursor:pointer;border:none">How fast can you deliver my package?<span class="faq-icon" style="color:#F59E0B">+</span></button><div class="faq-body" style="display:none;padding:0 24px 20px;color:#CBD5E1;line-height:1.7">We offer instant same-day delivery. Most local packages arrive within 1 to 2 hours of pickup.</div></div>
+        <div class="faq-item" style="background:#1E293B;border-radius:10px;border:1px solid #334155;overflow:hidden"><button class="faq-btn" onclick="toggleFaq(1)" style="width:100%;text-align:left;padding:18px 24px;background:none;color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:16px;display:flex;justify-content:space-between;cursor:pointer;border:none">Are my items insured during transit?<span class="faq-icon" style="color:#F59E0B">+</span></button><div class="faq-body" style="display:none;padding:0 24px 20px;color:#CBD5E1;line-height:1.7">Yes. Every delivery is fully tracked and insured at no extra cost to you.</div></div>
+        <div class="faq-item" style="background:#1E293B;border-radius:10px;border:1px solid #334155;overflow:hidden"><button class="faq-btn" onclick="toggleFaq(2)" style="width:100%;text-align:left;padding:18px 24px;background:none;color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:16px;display:flex;justify-content:space-between;cursor:pointer;border:none">Can I track my package in real time?<span class="faq-icon" style="color:#F59E0B">+</span></button><div class="faq-body" style="display:none;padding:0 24px 20px;color:#CBD5E1;line-height:1.7">Absolutely. Use our Track Package page with your order ID for live step-by-step updates.</div></div>
+        <div class="faq-item" style="background:#1E293B;border-radius:10px;border:1px solid #334155;overflow:hidden"><button class="faq-btn" onclick="toggleFaq(3)" style="width:100%;text-align:left;padding:18px 24px;background:none;color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:16px;display:flex;justify-content:space-between;cursor:pointer;border:none">What areas do you cover?<span class="faq-icon" style="color:#F59E0B">+</span></button><div class="faq-body" style="display:none;padding:0 24px 20px;color:#CBD5E1;line-height:1.7">We cover the full metro area and surrounding suburbs. Contact us to confirm your location.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section style="background:#F59E0B;text-align:center;padding:72px 24px">
+    <h2 style="font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(26px,4vw,42px);color:#0F172A;margin-bottom:16px">Ready to ship? Let's get your package moving.</h2>
+    <p style="color:#1E293B;margin-bottom:32px;font-size:16px">Need help? Email us at <strong>Donald001dave@gmail.com</strong></p>
+    <button class="amber-btn dark" style="font-size:18px;padding:16px 40px" onclick="showPage('contact')">Book a Delivery Now →</button>
+  </section>
+</div>
+
+<!-- SERVICES -->
+<div id="page-services" class="page">
+  <section style="background:linear-gradient(135deg,#0F172A,#1E293B);padding:80px 24px 60px;text-align:center;border-bottom:3px solid #F59E0B">
+    <h1 style="font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(32px,5vw,56px);color:#fff;margin-bottom:16px">Our <span style="color:#F59E0B">Delivery Services</span></h1>
+    <p style="color:#CBD5E1;font-size:18px;max-width:500px;margin:0 auto">Three options built around your schedule, urgency, and budget.</p>
+  </section>
+  <section style="background:#0F172A;padding:72px 24px">
+    <div style="max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:28px">
+      <div style="background:#1E293B;border-radius:16px;overflow:hidden;border:1px solid #334155;display:flex;flex-direction:column;transition:transform .2s" onmouseover="this.style.transform='translateY(-6px)'" onmouseout="this.style.transform='translateY(0)'">
+        <div style="background:#EF4444;padding:8px 20px;display:flex;justify-content:space-between;align-items:center"><span style="font-family:'Syne',sans-serif;font-weight:800;color:#fff;font-size:12px;letter-spacing:2px">URGENT</span><span style="font-size:22px">⚡</span></div>
+        <div style="padding:28px;flex:1;display:flex;flex-direction:column;gap:16px"><h3 style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:#fff">Fast Delivery</h3><p style="color:#CBD5E1;line-height:1.7;font-size:15px">High-priority courier service for items that need to move immediately. We dispatch a dedicated driver to your location right away.</p><div style="background:#0F172A;border-radius:8px;padding:14px"><p style="color:#F59E0B;font-weight:700;font-size:12px;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px">Ideal For</p><p style="color:#CBD5E1;font-size:14px">People or businesses with urgent documents, medical supplies, or last-minute orders.</p></div><div style="display:flex;gap:10px"><span style="color:#EF4444;font-size:18px">✓</span><p style="color:#CBD5E1;font-size:14px;line-height:1.6">Your package skips the warehouse sorting line and goes directly to its destination.</p></div><button class="amber-btn" style="margin-top:auto;width:100%" onclick="showPage('contact')">Book Fast Delivery</button></div>
+      </div>
+      <div style="background:#1E293B;border-radius:16px;overflow:hidden;border:1px solid #334155;display:flex;flex-direction:column;transition:transform .2s" onmouseover="this.style.transform='translateY(-6px)'" onmouseout="this.style.transform='translateY(0)'">
+        <div style="background:#F59E0B;padding:8px 20px;display:flex;justify-content:space-between;align-items:center"><span style="font-family:'Syne',sans-serif;font-weight:800;color:#fff;font-size:12px;letter-spacing:2px">POPULAR</span><span style="font-size:22px">📅</span></div>
+        <div style="padding:28px;flex:1;display:flex;flex-direction:column;gap:16px"><h3 style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:#fff">Scheduled Delivery</h3><p style="color:#CBD5E1;line-height:1.7;font-size:15px">Pick a specific date and time window that works best for you or your customer. We arrive exactly during that period.</p><div style="background:#0F172A;border-radius:8px;padding:14px"><p style="color:#F59E0B;font-weight:700;font-size:12px;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px">Ideal For</p><p style="color:#CBD5E1;font-size:14px">Subscription businesses, online stores, and people planning gifts or event supplies.</p></div><div style="display:flex;gap:10px"><span style="color:#F59E0B;font-size:18px">✓</span><p style="color:#CBD5E1;font-size:14px;line-height:1.6">Eliminates the guessing game. You know exactly when to open the door.</p></div><button class="amber-btn" style="margin-top:auto;width:100%" onclick="showPage('contact')">Schedule a Delivery</button></div>
+      </div>
+      <div style="background:#1E293B;border-radius:16px;overflow:hidden;border:1px solid #334155;display:flex;flex-direction:column;transition:transform .2s" onmouseover="this.style.transform='translateY(-6px)'" onmouseout="this.style.transform='translateY(0)'">
+        <div style="background:#10B981;padding:8px 20px;display:flex;justify-content:space-between;align-items:center"><span style="font-family:'Syne',sans-serif;font-weight:800;color:#fff;font-size:12px;letter-spacing:2px">RELIABLE</span><span style="font-size:22px">🛡️</span></div>
+        <div style="padding:28px;flex:1;display:flex;flex-direction:column;gap:16px"><h3 style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:#fff">Guaranteed No-Delay Shipping</h3><p style="color:#CBD5E1;line-height:1.7;font-size:15px">Our standard, ultra-reliable logistics service backed by an on-time guarantee. If we are late, the delivery is free.</p><div style="background:#0F172A;border-radius:8px;padding:14px"><p style="color:#F59E0B;font-weight:700;font-size:12px;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px">Ideal For</p><p style="color:#CBD5E1;font-size:14px">Everyday senders who want affordable rates without risking poor service.</p></div><div style="display:flex;gap:10px"><span style="color:#10B981;font-size:18px">✓</span><p style="color:#CBD5E1;font-size:14px;line-height:1.6">Zero stress. We plan optimized routes to bypass heavy traffic and delays.</p></div><button class="amber-btn" style="margin-top:auto;width:100%" onclick="showPage('contact')">Start Standard Shipping</button></div>
+      </div>
+    </div>
+  </section>
+  <section style="background:#F59E0B;padding:48px 24px;text-align:center">
+    <h2 style="font-family:'Syne',sans-serif;font-weight:800;color:#0F172A;font-size:28px;margin-bottom:20px">Not sure which service you need?</h2>
+    <button class="amber-btn dark" onclick="showPage('contact')">Contact Us — We'll Help You Choose</button>
+  </section>
+</div>
+
+<!-- ABOUT -->
+<div id="page-about" class="page">
+  <section style="background:linear-gradient(135deg,#0F172A,#1E293B);padding:80px 24px 60px;text-align:center;border-bottom:3px solid #F59E0B">
+    <h1 style="font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(30px,5vw,52px);color:#fff;margin-bottom:16px">Built on <span style="color:#F59E0B">Trust & Reliability</span></h1>
+    <p style="color:#CBD5E1;font-size:18px;max-width:560px;margin:0 auto">The story behind SwiftDrop — why we started and what drives us.</p>
+  </section>
+  <section style="background:#0F172A;padding:72px 24px">
+    <div style="max-width:760px;margin:0 auto">
+      <h2 style="font-family:'Syne',sans-serif;font-weight:800;font-size:28px;color:#F59E0B;margin-bottom:16px">Our Origin Story</h2>
+      <p style="color:#CBD5E1;line-height:1.85;font-size:17px;margin-bottom:40px">We started this delivery company because we were tired of watching people lose time, money, and customer trust due to broken delivery promises. Packages were arriving late, items were getting damaged, and customer service lines were completely silent. We knew there had to be a better way. We built this business to provide a straightforward, honest delivery service that treats your packages like our own.</p>
+      <div style="background:#1E293B;border-radius:14px;padding:32px;border:1px solid #334155;margin-bottom:40px"><h3 style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:#F59E0B;margin-bottom:12px">Our Mission</h3><p style="color:#CBD5E1;line-height:1.8">To provide the most dependable, transparent delivery network in the city, ensuring your packages arrive safely and on time, every single day.</p></div>
+      <h2 style="font-family:'Syne',sans-serif;font-weight:800;font-size:24px;color:#fff;margin-bottom:24px">Core Values</h2>
+      <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:40px">
+        <div style="display:flex;gap:18px;align-items:flex-start;background:#1E293B;border-radius:10px;padding:20px;border:1px solid #334155"><span style="font-size:28px">💯</span><div><strong style="font-family:'Syne',sans-serif;color:#fff;display:block;margin-bottom:6px">Absolute Honesty</strong><span style="color:#CBD5E1">We give you real delivery windows, not vague promises.</span></div></div>
+        <div style="display:flex;gap:18px;align-items:flex-start;background:#1E293B;border-radius:10px;padding:20px;border:1px solid #334155"><span style="font-size:28px">📦</span><div><strong style="font-family:'Syne',sans-serif;color:#fff;display:block;margin-bottom:6px">Unmatched Safety</strong><span style="color:#CBD5E1">We handle every package with strict care so it arrives in perfect condition.</span></div></div>
+        <div style="display:flex;gap:18px;align-items:flex-start;background:#1E293B;border-radius:10px;padding:20px;border:1px solid #334155"><span style="font-size:28px">🕐</span><div><strong style="font-family:'Syne',sans-serif;color:#fff;display:block;margin-bottom:6px">Reliability First</strong><span style="color:#CBD5E1">We show up on time, rain or shine, because your schedule matters.</span></div></div>
+      </div>
+      <div style="background:#F59E0B;border-radius:14px;padding:32px;margin-bottom:40px"><h3 style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:#0F172A;margin-bottom:12px">Why We're Genuinely Different</h3><p style="color:#1E293B;line-height:1.8">Unlike massive shipping corporations, you are never just a tracking number to us. We don't hide behind automated robot phone lines. When you work with us, you get direct access to real drivers and local support staff instantly.</p></div>
+      <p style="color:#CBD5E1;font-size:17px;line-height:1.8;margin-bottom:32px">You have enough things to manage. Let us take care of the logistics. Trust us with your next delivery, and experience how simple shipping should actually be.</p>
+      <div style="display:flex;gap:16px;flex-wrap:wrap">
+        <button class="amber-btn" onclick="showPage('contact')">Book a Delivery</button>
+        <button class="outline-btn" onclick="showPage('contact')">Contact Us</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- CONTACT -->
+<div id="page-contact" class="page">
+  <section style="background:linear-gradient(135deg,#0F172A,#1E293B);padding:80px 24px 60px;text-align:center;border-bottom:3px solid #F59E0B">
+    <h1 style="font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(30px,5vw,52px);color:#fff;margin-bottom:16px">Get in <span style="color:#F59E0B">Touch</span></h1>
+    <p style="color:#CBD5E1;font-size:18px">Book a delivery, request a quote, or ask us anything.</p>
+  </section>
+  <section style="background:#0F172A;padding:72px 24px">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:48px;max-width:960px;margin:0 auto">
+      <div>
+        <h2 style="font-family:'Syne',sans-serif;font-weight:700;font-size:24px;color:#fff;margin-bottom:28px">Send Us a Message</h2>
+        <div id="contact-form" style="display:flex;flex-direction:column;gap:16px">
+          <div><label style="color:#CBD5E1;font-size:13px;font-weight:600;display:block;margin-bottom:6px">Full Name *</label><input id="cf-name" type="text" placeholder="John Smith" style="width:100%;padding:12px 16px;border-radius:8px;background:#1E293B;border:1px solid #334155;color:#fff;font-size:15px"/></div>
+          <div><label style="color:#CBD5E1;font-size:13px;font-weight:600;display:block;margin-bottom:6px">Email Address *</label><input id="cf-email" type="email" placeholder="john@example.com" style="width:100%;padding:12px 16px;border-radius:8px;background:#1E293B;border:1px solid #334155;color:#fff;font-size:15px"/></div>
+          <div><label style="color:#CBD5E1;font-size:13px;font-weight:600;display:block;margin-bottom:6px">Phone Number</label><input id="cf-phone" type="tel" placeholder="+1 555-0000" style="width:100%;padding:12px 16px;border-radius:8px;background:#1E293B;border:1px solid #334155;color:#fff;font-size:15px"/></div>
+          <div><label style="color:#CBD5E1;font-size:13px;font-weight:600;display:block;margin-bottom:6px">Service Needed</label><select id="cf-service" style="width:100%;padding:12px 16px;border-radius:8px;background:#1E293B;border:1px solid #334155;color:#fff;font-size:15px"><option value="">Select a service…</option><option>Fast Delivery</option><option>Scheduled Delivery</option><option>Standard Shipping</option><option>Get a Quote</option></select></div>
+          <div><label style="color:#CBD5E1;font-size:13px;font-weight:600;display:block;margin-bottom:6px">Message *</label><textarea id="cf-message" rows="5" placeholder="Tell us pickup address, drop-off address, and any special instructions…" style="width:100%;padding:12px 16px;border-radius:8px;background:#1E293B;border:1px solid #334155;color:#fff;font-size:15px;resize:vertical"></textarea></div>
+          <button class="amber-btn" style="width:100%;padding:16px;font-size:16px" onclick="submitContact()">Send Message →</button>
+        </div>
+        <div id="contact-success" style="display:none;background:rgba(16,185,129,.1);border:1px solid #10B981;border-radius:12px;padding:32px;text-align:center"><div style="font-size:48px;margin-bottom:16px">✅</div><h3 style="font-family:'Syne',sans-serif;color:#10B981;margin-bottom:8px">Message Sent!</h3><p style="color:#CBD5E1">We'll get back to you within 30 minutes during business hours.</p></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:24px">
+        <h2 style="font-family:'Syne',sans-serif;font-weight:700;font-size:24px;color:#fff">Direct Contact</h2>
+        <div style="display:flex;gap:16px;align-items:flex-start;background:#1E293B;border-radius:12px;padding:20px;border:1px solid #334155"><span style="font-size:24px">📧</span><div><p style="color:#64748B;font-size:12px;font-weight:600;text-transform:uppercase;margin-bottom:4px">Email</p><p style="color:#fff;font-size:15px">Donald001dave@gmail.com</p></div></div>
+        <div style="display:flex;gap:16px;align-items:flex-start;background:#1E293B;border-radius:12px;padding:20px;border:1px solid #334155"><span style="font-size:24px">⏰</span><div><p style="color:#64748B;font-size:12px;font-weight:600;text-transform:uppercase;margin-bottom:4px">Hours</p><p style="color:#fff;font-size:15px">Mon–Sat, 7 AM – 9 PM</p></div></div>
+        <div style="display:flex;gap:16px;align-items:flex-start;background:#1E293B;border-radius:12px;padding:20px;border:1px solid #334155"><span style="font-size:24px">🚚</span><div><p style="color:#64748B;font-size:12px;font-weight:600;text-transform:uppercase;margin-bottom:4px">Coverage</p><p style="color:#fff;font-size:15px">Full metro area & suburbs</p></div></div>
+        <div style="background:rgba(245,158,11,.1);border:1px solid #F59E0B;border-radius:12px;padding:20px"><p style="color:#F59E0B;font-weight:700;margin-bottom:6px">⚡ Quick Response Promise</p><p style="color:#CBD5E1;font-size:14px">All enquiries are answered within 30 minutes by a real person — not a bot.</p></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- TRACK -->
+<div id="page-track" class="page">
+  <section style="background:linear-gradient(135deg,#0F172A,#1E293B);padding:80px 24px 60px;text-align:center;border-bottom:3px solid #F59E0B">
+    <h1 style="font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(30px,5vw,52px);color:#fff;margin-bottom:16px">Track Your <span style="color:#F59E0B">Package</span></h1>
+    <p style="color:#CBD5E1;font-size:18px;margin-bottom:36px">Enter your order ID to see live updates on your delivery.</p>
+    <div style="display:flex;gap:12px;justify-content:center;max-width:480px;margin:0 auto;flex-wrap:wrap">
+      <input id="track-input" placeholder="e.g. PKG-4821" onkeydown="if(event.key==='Enter')doTrack()" style="flex:1;min-width:200px;padding:14px 20px;border-radius:8px;background:#1E293B;border:2px solid #F59E0B;color:#fff;font-size:16px;font-family:'Syne',sans-serif;font-weight:700"/>
+      <button class="amber-btn" style="padding:14px 28px" onclick="doTrack()">Track →</button>
+    </div>
+    <p style="color:#64748B;font-size:13px;margin-top:16px">Demo IDs: <span style="color:#F59E0B;cursor:pointer" onclick="setTrackId('PKG-4821')">PKG-4821</span> · <span style="color:#F59E0B;cursor:pointer" onclick="setTrackId('PKG-3307')">PKG-3307</span> · <span style="color:#F59E0B;cursor:pointer" onclick="setTrackId('PKG-5519')">PKG-5519</span></p>
+  </section>
+  <section style="background:#0F172A;padding:72px 24px">
+    <div id="track-result" style="max-width:760px;margin:0 auto"><div style="text-align:center;color:#64748B;font-size:16px"><div style="font-size:64px;margin-bottom:16px">📦</div>Enter your Order ID above to begin tracking.</div></div>
+  </section>
+</div>
+
+<!-- ADMIN -->
+<div id="page-admin" class="page">
+  <div id="admin-login" style="min-height:80vh;display:flex;align-items:center;justify-content:center;background:#0F172A;padding:24px">
+    <div style="background:#1E293B;border-radius:16px;padding:48px;width:100%;max-width:380px;text-align:center;border:1px solid #334155">
+      <div style="font-size:48px;margin-bottom:16px">🔒</div>
+      <h2 style="font-family:'Syne',sans-serif;font-weight:800;color:#fff;margin-bottom:8px">Admin Access</h2>
+      <p style="color:#64748B;margin-bottom:28px">Enter your PIN to access the messaging dashboard.</p>
+      <input id="admin-pin" type="password" placeholder="PIN (demo: 1234)" onkeydown="if(event.key==='Enter')adminLogin()" style="width:100%;padding:14px 18px;border-radius:8px;margin-bottom:16px;background:#0F172A;border:2px solid #334155;color:#fff;font-size:18px;text-align:center;letter-spacing:6px"/>
+      <button class="amber-btn" style="width:100%" onclick="adminLogin()">Unlock Dashboard</button>
+      <p id="admin-pin-err" style="color:#EF4444;margin-top:12px;font-size:14px;display:none">Incorrect PIN.</p>
+    </div>
+  </div>
+  <div id="admin-dashboard" style="display:none">
+    <div style="display:flex;height:calc(100vh - 64px);overflow:hidden">
+      <div id="admin-sidebar" style="width:300px;min-width:250px;background:#1E293B;border-right:1px solid #334155;display:flex;flex-direction:column;overflow-y:auto">
+        <div style="padding:20px 16px;border-bottom:1px solid #334155"><h2 style="font-family:'Syne',sans-serif;font-weight:800;color:#fff;font-size:18px">📦 Orders</h2><p style="color:#64748B;font-size:13px;margin-top:4px">Click an order to reply</p></div>
+        <div id="admin-order-list"></div>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;overflow:hidden">
+        <div id="admin-placeholder" style="flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;color:#64748B"><div style="font-size:64px">💬</div><p style="font-size:17px">Select an order to view & reply</p></div>
+        <div id="admin-chat" style="display:none;flex-direction:column;height:100%">
+          <div id="admin-chat-header" style="padding:16px 24px;border-bottom:1px solid #334155;background:#1E293B;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px"></div>
+          <div id="admin-messages" style="flex:1;overflow-y:auto;padding:24px;display:flex;flex-direction:column;gap:14px;background:#0F172A"></div>
+          <div style="padding:16px 24px;border-top:1px solid #334155;background:#1E293B;display:flex;gap:12px;align-items:flex-end">
+            <textarea id="admin-reply-input" rows="2" placeholder="Type your reply… (Enter to send, Shift+Enter for new line)" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();adminSendReply()}" style="flex:1;padding:12px 16px;border-radius:10px;background:#0F172A;border:1px solid #334155;color:#fff;font-size:15px;resize:none"></textarea>
+            <button class="amber-btn" style="padding:12px 24px;flex-shrink:0" onclick="adminSendReply()">Send Reply</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer id="site-footer">
+  <div style="max-width:1100px;margin:0 auto">
+    <div style="display:flex;gap:48px;flex-wrap:wrap;justify-content:space-between;margin-bottom:40px">
+      <div style="max-width:260px"><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:#F59E0B;margin-bottom:12px">⚡ SwiftDrop</div><p style="color:#64748B;line-height:1.7;font-size:14px">Safe, on-time delivery for every package. Trusted by 10,000+ local businesses and individuals.</p></div>
+      <div><p style="font-weight:700;color:#fff;margin-bottom:12px">Pages</p><p onclick="showPage('home')" style="color:#64748B;margin-bottom:8px;cursor:pointer;font-size:14px">Home</p><p onclick="showPage('services')" style="color:#64748B;margin-bottom:8px;cursor:pointer;font-size:14px">Services</p><p onclick="showPage('about')" style="color:#64748B;margin-bottom:8px;cursor:pointer;font-size:14px">About</p><p onclick="showPage('contact')" style="color:#64748B;margin-bottom:8px;cursor:pointer;font-size:14px">Contact</p></div>
+      <div><p style="font-weight:700;color:#fff;margin-bottom:12px">Services</p><p style="color:#64748B;margin-bottom:8px;font-size:14px">Fast Delivery</p><p style="color:#64748B;margin-bottom:8px;font-size:14px">Scheduled Delivery</p><p style="color:#64748B;margin-bottom:8px;font-size:14px">Standard Shipping</p></div>
+      <div><p style="font-weight:700;color:#fff;margin-bottom:12px">Contact</p><p style="color:#64748B;font-size:14px;margin-bottom:8px">Donald001dave@gmail.com</p><p style="color:#64748B;font-size:14px;margin-bottom:16px">Mon–Sat, 7 AM – 9 PM</p><button class="amber-btn small" onclick="showPage('track')">Track a Package</button></div>
+    </div>
+    <div style="border-top:1px solid #334155;padding-top:24px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px"><p style="color:#64748B;font-size:13px">© 2025 SwiftDrop. All rights reserved.</p><p style="color:#64748B;font-size:13px">Safe · Reliable · Transparent</p></div>
+  </div>
+</footer>
+
+<script>
+const ORDERS=[
+  {id:"PKG-4821",customer:"David K.",email:"david@example.com",phone:"+1 555-0192",service:"Fast Delivery",from:"42 Oak Street",to:"19 Maple Ave",status:"In Transit",eta:"2:45 PM",progress:65,
+   events:[{time:"1:10 PM",label:"Order placed",done:true},{time:"1:25 PM",label:"Driver dispatched",done:true},{time:"1:40 PM",label:"Package picked up",done:true},{time:"2:10 PM",label:"En route to destination",done:true},{time:"2:45 PM",label:"Delivered",done:false}],
+   messages:[{from:"customer",text:"Hi, is my package on the way?",time:"1:42 PM"},{from:"admin",text:"Yes! Your driver just picked it up. ETA ~2:45 PM.",time:"1:43 PM"}]},
+  {id:"PKG-3307",customer:"Sarah M.",email:"sarah@example.com",phone:"+1 555-0284",service:"Scheduled Delivery",from:"7 Pine Road",to:"88 Cedar Blvd",status:"Delivered",eta:"—",progress:100,
+   events:[{time:"10:00 AM",label:"Order placed",done:true},{time:"10:20 AM",label:"Driver dispatched",done:true},{time:"10:45 AM",label:"Package picked up",done:true},{time:"11:15 AM",label:"En route to destination",done:true},{time:"11:50 AM",label:"Delivered",done:true}],
+   messages:[{from:"customer",text:"Got it! Thank you so much.",time:"11:52 AM"}]},
+  {id:"PKG-5519",customer:"James R.",email:"james@example.com",phone:"+1 555-0371",service:"Standard Shipping",from:"3 Birch Lane",to:"55 Elm Street",status:"Awaiting Pickup",eta:"4:00 PM",progress:15,
+   events:[{time:"3:00 PM",label:"Order placed",done:true},{time:"3:15 PM",label:"Driver dispatched",done:false},{time:"3:40 PM",label:"Package picked up",done:false},{time:"3:50 PM",label:"En route to destination",done:false},{time:"4:00 PM",label:"Delivered",done:false}],
+   messages:[]}
+];
+
+function showPage(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b=>{b.classList.remove('active');if(b.dataset.page===name)b.classList.add('active');});
+  document.getElementById('site-footer').style.display=name==='admin'?'none':'block';
+  window.scrollTo(0,0);
+}
+
+let openFaq=null;
+function toggleFaq(i){
+  const items=document.querySelectorAll('.faq-item');
+  if(openFaq===i){items[i].querySelector('.faq-body').style.display='none';items[i].querySelector('.faq-icon').textContent='+';items[i].style.borderColor='#334155';openFaq=null;}
+  else{
+    if(openFaq!==null){items[openFaq].querySelector('.faq-body').style.display='none';items[openFaq].querySelector('.faq-icon').textContent='+';items[openFaq].style.borderColor='#334155';}
+    items[i].querySelector('.faq-body').style.display='block';items[i].querySelector('.faq-icon').textContent='−';items[i].style.borderColor='#F59E0B';openFaq=i;
+  }
+}
+
+function homeTrack(){const v=document.getElementById('home-track-input').value.trim();if(v){document.getElementById('track-input').value=v;showPage('track');doTrack();}else showPage('track');}
+function setTrackId(id){document.getElementById('track-input').value=id;}
+function nowTime(){return new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});}
+function statusColor(s){return s==='Delivered'?'#10B981':s==='In Transit'?'#F59E0B':'#CBD5E1';}
+
+function submitContact(){
+  const name=document.getElementById('cf-name').value.trim(),email=document.getElementById('cf-email').value.trim(),msg=document.getElementById('cf-message').value.trim();
+  if(name&&email&&msg){document.getElementById('contact-form').style.display='none';document.getElementById('contact-success').style.display='block';}
+}
+
+function doTrack(){
+  const q=document.getElementById('track-input').value.trim().toUpperCase();
+  const order=ORDERS.find(o=>o.id===q);
+  const el=document.getElementById('track-result');
+  if(!q){el.innerHTML='<div style="text-align:center;color:#64748B;font-size:16px"><div style="font-size:64px;margin-bottom:16px">📦</div>Enter your Order ID above to begin tracking.</div>';return;}
+  if(!order){el.innerHTML='<div style="text-align:center;color:#EF4444;font-size:16px"><div style="font-size:64px;margin-bottom:16px">❌</div>No order found for <strong>'+q+'</strong>. Please check your ID and try again.</div>';return;}
+  renderTrack(order,el);
+}
+
+function renderTrack(order,el){
+  const sc=statusColor(order.status);
+  const icon=order.status==='In Transit'?'🚚 ':order.status==='Delivered'?'✅ ':'⏳ ';
+  const evHTML=order.events.map((ev,i)=>'<div style="display:flex;gap:16px;align-items:flex-start"><div style="display:flex;flex-direction:column;align-items:center;width:28px"><div style="width:20px;height:20px;border-radius:50%;background:'+(ev.done?'#10B981':'#334155')+';display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;flex-shrink:0">'+(ev.done?'✓':'')+'</div>'+(i<order.events.length-1?'<div style="width:2px;min-height:28px;background:'+(ev.done?'#10B981':'#334155')+';margin:4px 0"></div>':'')+'</div><div style="padding-bottom:20px"><p style="color:'+(ev.done?'#fff':'#64748B')+';font-weight:'+(ev.done?700:400)+'">'+ev.label+'</p><p style="color:#64748B;font-size:13px">'+ev.time+'</p></div></div>').join('');
+  const msgsHTML=order.messages.length===0?'<p style="color:#64748B;font-size:14px;text-align:center;padding:20px">No messages yet.</p>':order.messages.map(m=>'<div style="display:flex;justify-content:'+(m.from==='customer'?'flex-end':'flex-start')+'"><div style="max-width:75%;background:'+(m.from==='customer'?'#F59E0B':'#0F172A')+';color:'+(m.from==='customer'?'#0F172A':'#fff')+';border-radius:'+(m.from==='customer'?'16px 16px 4px 16px':'16px 16px 16px 4px')+';padding:10px 16px"><p style="font-size:14px">'+m.text+'</p><p style="font-size:11px;opacity:.6;margin-top:4px;text-align:right">'+m.time+'</p></div></div>').join('');
+  el.innerHTML='<div style="display:flex;flex-direction:column;gap:28px" class="fade-in"><div style="background:#1E293B;border-radius:16px;padding:28px;border:1px solid #334155"><div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:20px"><div><p style="color:#64748B;font-size:13px;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Order ID</p><h2 style="font-family:\'Syne\',sans-serif;font-weight:800;font-size:24px;color:#fff">'+order.id+'</h2><p style="color:#CBD5E1;margin-top:4px">'+order.service+'</p></div><div style="background:'+sc+'20;border:1px solid '+sc+';border-radius:99px;padding:8px 18px"><span style="color:'+sc+';font-weight:700;font-size:14px">'+icon+order.status+'</span></div></div><div style="margin-bottom:20px"><div style="display:flex;justify-content:space-between;margin-bottom:8px"><span style="color:#CBD5E1;font-size:13px">Delivery Progress</span><span style="color:#F59E0B;font-size:13px;font-weight:700">'+order.progress+'%</span></div><div style="background:#334155;border-radius:99px;height:10px;overflow:hidden"><div style="width:'+order.progress+'%;height:100%;background:'+(order.progress===100?'#10B981':'#F59E0B')+';border-radius:99px"></div></div></div><div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><div style="flex:1;min-width:130px;background:#0F172A;border-radius:8px;padding:12px"><p style="color:#64748B;font-size:11px;text-transform:uppercase">From</p><p style="color:#fff;font-weight:700">'+order.from+'</p></div><span style="color:#F59E0B;font-size:24px">→</span><div style="flex:1;min-width:130px;background:#0F172A;border-radius:8px;padding:12px"><p style="color:#64748B;font-size:11px;text-transform:uppercase">To</p><p style="color:#fff;font-weight:700">'+order.to+'</p></div>'+(order.eta!=='—'?'<div style="background:rgba(245,158,11,.2);border-radius:8px;padding:12px;text-align:center"><p style="color:#64748B;font-size:11px;text-transform:uppercase">ETA</p><p style="color:#F59E0B;font-weight:800;font-size:18px">'+order.eta+'</p></div>':'')+'</div></div><div style="background:#1E293B;border-radius:16px;padding:28px;border:1px solid #334155"><h3 style="font-family:\'Syne\',sans-serif;font-weight:700;font-size:18px;color:#fff;margin-bottom:24px">📍 Live Tracking Timeline</h3>'+evHTML+'</div><div style="background:#1E293B;border-radius:16px;padding:28px;border:1px solid #334155"><h3 style="font-family:\'Syne\',sans-serif;font-weight:700;font-size:18px;color:#fff;margin-bottom:6px">💬 Message Support</h3><p style="color:#64748B;font-size:13px;margin-bottom:20px">Send a message — a real team member will reply.</p><div id="track-msgs" style="display:flex;flex-direction:column;gap:12px;margin-bottom:20px;max-height:260px;overflow-y:auto">'+msgsHTML+'</div><div style="display:flex;gap:12px"><input id="track-msg-input" placeholder="Type your message…" onkeydown="if(event.key===\'Enter\')trackSendMsg(\''+order.id+'\')" style="flex:1;padding:12px 16px;border-radius:8px;background:#0F172A;border:1px solid #334155;color:#fff;font-size:15px"/><button class="amber-btn small" onclick="trackSendMsg(\''+order.id+'\')">Send</button></div></div></div>';
+}
+
+function trackSendMsg(orderId){
+  const inp=document.getElementById('track-msg-input');
+  const text=inp.value.trim();if(!text)return;
+  const order=ORDERS.find(o=>o.id===orderId);if(!order)return;
+  order.messages.push({from:'customer',text,time:nowTime()});
+  inp.value='';
+  const msgsEl=document.getElementById('track-msgs');
+  if(msgsEl){const d=document.createElement('div');d.style.cssText='display:flex;justify-content:flex-end';d.innerHTML='<div style="max-width:75%;background:#F59E0B;color:#0F172A;border-radius:16px 16px 4px 16px;padding:10px 16px"><p style="font-size:14px">'+text+'</p><p style="font-size:11px;opacity:.6;margin-top:4px;text-align:right">'+nowTime()+'</p></div>';msgsEl.appendChild(d);msgsEl.scrollTop=msgsEl.scrollHeight;}
+  if(adminSelectedOrder===orderId)renderAdminChat();
+}
+
+let adminSelectedOrder=null;
+function adminLogin(){
+  if(document.getElementById('admin-pin').value==='1234'){
+    document.getElementById('admin-login').style.display='none';
+    document.getElementById('admin-dashboard').style.display='block';
+    renderAdminSidebar();
+  }else{document.getElementById('admin-pin-err').style.display='block';}
+}
+function renderAdminSidebar(){
+  document.getElementById('admin-order-list').innerHTML=ORDERS.map(o=>{
+    const sc=statusColor(o.status);const cm=o.messages.filter(m=>m.from==='customer').length;const lm=o.messages.length>0?o.messages[o.messages.length-1].text:'';const sel=adminSelectedOrder===o.id;
+    return '<div onclick="adminSelectOrder(\''+o.id+'\')" style="padding:16px;border-bottom:1px solid #334155;background:'+(sel?'#0F172A':'transparent')+';cursor:pointer;border-left:'+(sel?'3px solid #F59E0B':'3px solid transparent')+'"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px"><span style="font-family:\'Syne\',sans-serif;font-weight:700;color:#fff;font-size:14px">'+o.id+'</span>'+(cm>0?'<span style="background:#F59E0B;color:#0F172A;border-radius:99px;font-size:11px;font-weight:800;padding:2px 8px">'+cm+'</span>':'')+'</div><p style="color:#CBD5E1;font-size:13px;margin-bottom:4px">'+o.customer+'</p><div style="display:flex;gap:8px;align-items:center"><span style="font-size:11px;font-weight:700;color:'+sc+';background:'+sc+'20;border-radius:99px;padding:2px 8px">'+o.status+'</span><span style="color:#64748B;font-size:12px">'+o.service+'</span></div>'+(lm?'<p style="color:#64748B;font-size:12px;margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+lm+'</p>':'')+'</div>';
+  }).join('');
+}
+function adminSelectOrder(id){adminSelectedOrder=id;renderAdminSidebar();renderAdminChat();}
+function adminUpdateStatus(id,status){
+  const o=ORDERS.find(x=>x.id===id);if(!o)return;
+  o.status=status;o.progress=status==='Delivered'?100:status==='In Transit'?65:15;
+  o.events=o.events.map((ev,i)=>status==='Delivered'?{...ev,done:true}:status==='In Transit'?{...ev,done:i<=3}:{...ev,done:i===0});
+  renderAdminSidebar();renderAdminChat();
+}
+function renderAdminChat(){
+  const order=ORDERS.find(o=>o.id===adminSelectedOrder);if(!order)return;
+  document.getElementById('admin-placeholder').style.display='none';
+  const chatEl=document.getElementById('admin-chat');chatEl.style.display='flex';
+  const sc=statusColor(order.status);
+  document.getElementById('admin-chat-header').innerHTML='<div><h3 style="font-family:\'Syne\',sans-serif;font-weight:800;color:#fff;font-size:18px">'+order.id+' — '+order.customer+'</h3><p style="color:#64748B;font-size:13px">'+order.service+' · '+order.from+' → '+order.to+'</p><p style="color:#64748B;font-size:13px">'+order.email+' · '+order.phone+'</p></div><div style="display:flex;gap:8px;flex-wrap:wrap">'+['Awaiting Pickup','In Transit','Delivered'].map(s=>'<button onclick="adminUpdateStatus(\''+order.id+'\',\''+s+'\')" style="padding:7px 12px;border-radius:6px;font-size:12px;font-weight:700;background:'+(order.status===s?statusColor(s):'transparent')+';color:'+(order.status===s?'#0F172A':statusColor(s))+';border:1.5px solid '+statusColor(s)+';cursor:pointer">'+s+'</button>').join('')+'</div>';
+  const msgsEl=document.getElementById('admin-messages');
+  msgsEl.innerHTML=order.messages.length===0?'<div style="text-align:center;color:#64748B;padding:40px">No messages yet.</div>':order.messages.map(m=>'<div style="display:flex;justify-content:'+(m.from==='admin'?'flex-end':'flex-start')+'"><div style="max-width:70%;background:'+(m.from==='admin'?'#F59E0B':'#1E293B')+';color:'+(m.from==='admin'?'#0F172A':'#fff')+';border-radius:'+(m.from==='admin'?'16px 16px 4px 16px':'16px 16px 16px 4px')+';padding:12px 16px;border:'+(m.from==='customer'?'1px solid #334155':'none')+'"><p style="font-size:13px;font-weight:600;margin-bottom:4px;opacity:.7">'+(m.from==='admin'?'You (Admin)':order.customer)+'</p><p style="font-size:15px">'+m.text+'</p><p style="font-size:11px;opacity:.6;margin-top:4px;text-align:right">'+m.time+'</p></div></div>').join('');
+  msgsEl.scrollTop=msgsEl.scrollHeight;
+}
+function adminSendReply(){
+  const inp=document.getElementById('admin-reply-input');const text=inp.value.trim();
+  if(!text||!adminSelectedOrder)return;
+  const order=ORDERS.find(o=>o.id===adminSelectedOrder);if(!order)return;
+  order.messages.push({from:'admin',text,time:nowTime()});inp.value='';
+  renderAdminChat();renderAdminSidebar();
+}
+</script>
+</body>
+</html>
